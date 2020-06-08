@@ -1,0 +1,22 @@
+﻿@model SQLMultiFlowWeb.Areas.Accounts.ViewsModels.VMLogin
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<main>
+    @*<div asp-validation-summary="All"></div>*@
+    <form method="post">
+        <div>
+            <label asp-for="Login"></label><input asp-for="Login" type="text" />
+            <span asp-validation-for="Login"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><input asp-for="Password" type="text" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <input type="submit" value="Ok" /><input type="reset" value="reset" /><a asp-route="addLogin"><input type="button" value="Create" /></a>
+        </div>
+    </form>
+</main>
