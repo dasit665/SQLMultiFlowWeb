@@ -24,25 +24,26 @@ namespace SQLMultiFlowWeb
         public void ConfigureServices(IServiceCollection services)
         {
             #region DBContext
-            //services.AddDbContext<SQLMultyFlowWebContext>(options=>
-            //{
-            //    options.UseSqlServer(Configuration.GetConnectionString("EFCoreSQLMFW"));
-            //});
+            services.AddDbContext<SQLMultyFlowWebContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("default"));
+            });
             #endregion DBContext
 
             #region Authentication
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(optipns =>
                 {
-                    optipns.Cookie.Name = "LoginCookie";
+                    optipns.Cookie.Name = "AuthenticationCookie";
                     optipns.Cookie.MaxAge = TimeSpan.FromDays(3.5);
 
                     optipns.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Accounts/Access/Login");
                 });
+
             #endregion Authentication
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,14 +66,15 @@ namespace SQLMultiFlowWeb
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(name: "default", pattern: "{area}/{controller}/{action}/{id?}");
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(name: "default", pattern: "{area=Main}/{controller=Home}/{action=Index}/{id?}");
+
             });
 
-            app.UseEndpoints(paths =>
+            app.UseEndpoints(routes =>
             {
-                paths.MapControllerRoute(name: "addLogin", pattern: "Accounts/AddLogin/Create");
-                paths.MapControllerRoute(name: "login", pattern: "Accounts/Access/Login");
+                routes.MapControllerRoute(name: "addLogin", pattern: "Accounts/AddLogin/Create");
+                routes.MapControllerRoute(name: "login", pattern: "Accounts/Access/Login");
+                routes.MapControllerRoute(name: "main", pattern: "Main/Home/Index");
             });
         }
     }

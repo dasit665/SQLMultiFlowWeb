@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -22,8 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Accounts\Data\" />
-    <Folder Include="Areas\Accounts\Models\" />
+    <Folder Include="Areas\Accounts\Controllers\"/>
+    <Folder Include="Areas\Accounts\Views\"/>
+    <Folder Include="Areas\Accounts\Views\Access"/>
+    <Folder Include="Areas\Accounts\Views\AddLogin"/>
+    <Folder Include="Areas\Accounts\Views\ViewsModels"/>
+    <Folder Include="Areas\Main\Data\" />
+    <Folder Include="Areas\Main\Models\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

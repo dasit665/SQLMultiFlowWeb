@@ -13,10 +13,12 @@ namespace SQLMultiFlowWeb.Areas.Accounts.ViewsModels
         [RegularExpression(@"[a-z]{3,48}", ErrorMessage ="Латинские символы длиной от 3 до 48 символов")]
         public string Login { get; set; }
 
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Не введен пароль")]
         [Display(Name ="Password:")]
         public string Password { get; set; }
 
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Не введен пароль повторно")]
         [Display(Name = "Password confirm:")]
         [Compare("Password", ErrorMessage ="Пароли не совпадают")]

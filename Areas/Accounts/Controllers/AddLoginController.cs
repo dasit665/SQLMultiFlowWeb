@@ -7,12 +7,20 @@ using SQLMultiFlowWeb.Areas.Accounts.ViewsModels;
 
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SQLMultiFlowWeb.Areas.Accounts.Controllers
 {
     [Area("Accounts")]
     public class AddLoginController : Controller
     {
+        public SQLMultyFlowWebContext DB { get; set; }
+
+        public AddLoginController(SQLMultyFlowWebContext SQLContext)
+        {
+            this.DB = SQLContext;
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -24,21 +32,18 @@ namespace SQLMultiFlowWeb.Areas.Accounts.Controllers
         {
             if (ModelState.IsValid == true)
             {
-                using (SQLMultyFlowWebContext DB = new SQLMultyFlowWebContext())
+                TbLogins loginToAdd = new TbLogins();
+
+                loginToAdd.UserName = createdLogin.Login;
+
+                using (var hash = SHA256.Create())
                 {
-                    TbLogins loginToAdd = new TbLogins();
-
-                    loginToAdd.UserName = createdLogin.Login;
-
-                    using (var hash = SHA256.Create())
-                    {
-                        var hashBytes = hash.ComputeHash(Encoding.Default.GetBytes(createdLogin.Password));
-                        loginToAdd.HashPasswors = Encoding.Default.GetString(hashBytes);
-                    }
-
-                    DB.TbLogins.Add(loginToAdd);
-                    DB.SaveChanges();
+                    var hashBytes = hash.ComputeHash(Encoding.Unicode.GetBytes(createdLogin.Password));
+                    loginToAdd.HashPasswors = Encoding.Unicode.GetString(hashBytes);
                 }
+
+                DB.TbLogins.Add(loginToAdd);
+                DB.SaveChanges();
 
                 return RedirectToRoute("login");
 

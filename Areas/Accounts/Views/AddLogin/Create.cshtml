@@ -6,17 +6,18 @@
 }
 
 <main>
-    <form method="post">
+    <div class="classs-heder"><h3>Create login</h3></div>
+    <form method="post" class="class-form">
         <div>
             <label asp-for="Login"></label><input asp-for="Login" type="text" />
             <span asp-validation-for="Login"></span>
         </div>
         <div>
-            <label asp-for="Password"></label><input asp-for="Password" type="password" />
+            <label asp-for="Password"></label><input asp-for="Password"/>
             <span asp-validation-for="Password"></span>
         </div>
         <div>
-            <label asp-for="PasswordConfirm"></label><input asp-for="PasswordConfirm" type="password" />
+            <label asp-for="PasswordConfirm"></label><input asp-for="PasswordConfirm"/>
             <span asp-validation-for="PasswordConfirm"></span>
         </div>
         <input type="submit" value="OK" /><input type="reset" value="Reset" />

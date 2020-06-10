@@ -5,14 +5,14 @@
 }
 
 <main>
-    @*<div asp-validation-summary="All"></div>*@
-    <form method="post">
+    <div class="class-header"><h3>Login</h3></div>
+    <form method="post" class="class-form">
         <div>
             <label asp-for="Login"></label><input asp-for="Login" type="text" />
             <span asp-validation-for="Login"></span>
         </div>
         <div>
-            <label asp-for="Password"></label><input asp-for="Password" type="text" />
+            <label asp-for="Password"></label><input asp-for="Password"/>
             <span asp-validation-for="Password"></span>
         </div>
         <div>
