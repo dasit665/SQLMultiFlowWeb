@@ -51,7 +51,7 @@ namespace SQLMultiFlowWeb.Areas.Accounts.Controllers
                 {
                     await Identification(loginInDB);
 
-                    return RedirectToRoute("default1");
+                    return RedirectToRoute("main");
                 }
                 else
                 {

@@ -8,6 +8,7 @@ namespace SQLMultiFlowWeb
         public int Id { get; set; }
         public int ScriptVersionId { get; set; }
         public int ServerDbid { get; set; }
+        public DateTime DateOfTry { get; set; }
         public bool? VersionFlowed { get; set; }
 
         public virtual TbScriptVersion ScriptVersion { get; set; }

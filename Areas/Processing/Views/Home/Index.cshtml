@@ -1,0 +1,160 @@
+﻿@model SQLMultiFlowWeb.Areas.Processing.Models.ScriptsServers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+
+    List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+    foreach (var i in Model.Markers)
+    {
+        selectListItems.Add(new SelectListItem(i, i));
+    }
+    selectListItems.Add(new SelectListItem("Все", "All", true));
+}
+
+<main>
+    <div>
+        <a asp-route="main">Главная</a>
+    </div>
+    <div class="class-user-id">
+        <h3>Пользователь:@User.Identity.Name</h3>
+    </div>
+
+    <div class="class-page-header">
+        <h4>Заливка самых последних версий скриптов</h4>
+    </div>
+
+    <form name="mainForm">
+
+        <div class="class-checkbox-scripts">
+            @foreach (var i in Model.ScriptsNames)
+            {
+                <div class="class-checkbox-item">
+                    <input type="checkbox" name="@i" checked="checked" /><label>@i</label>
+                </div>
+            }
+        </div>
+
+        <div class="class-select-markers">
+            <label>Сервера:</label>
+            <select name="@nameof(Model.Markers)" id="@nameof(Model.Markers)" asp-items="selectListItems">
+            </select>
+        </div>
+
+        <div class="class-checkbox-servers">
+            @foreach (var i in Model.Servers)
+            {
+                <div class="class-checkbox-servers-item">
+                    <input type="checkbox" checked="checked" name="@i.ServerDomainName#@i.DataBaseName" />
+                    <label>@i.ServerDomainName @i.DataBaseName</label>
+                </div>
+            }
+        </div>
+        <input type="button" value="Разлить" id="Flow" />
+    </form>
+
+</main>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        async function ChangeServer(Marker) {
+            let servers = document.querySelectorAll(".class-checkbox-servers > div");
+            let body =
+            {
+                "Marker": `${Marker}`
+            }
+
+
+            for (var i of servers) {
+                i.remove()
+            }
+
+            let result = await fetch("/Processing/ScriptsServers",
+                {
+                    method: "POST",
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                })
+
+            let fragment = new DocumentFragment();
+
+
+            for (var i of await result.json()) {
+                let div = document.createElement("div");
+                div.setAttribute("class", "class-checkbox-servers-item");
+
+                let input = document.createElement("label");
+                input.innerText = i.ServerDomainName + " " + i.DataBaseName;
+
+                let checkbox = document.createElement("input");
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("checked", "checked");
+                checkbox.setAttribute("name", `${i.ServerDomainName}#${i.DataBaseName}`);
+
+                div.appendChild(checkbox);
+                div.appendChild(input);
+
+                fragment.appendChild(div);
+            }
+
+            document.querySelector(".class-checkbox-servers").appendChild(fragment);
+        }
+
+
+        async function Flow() {
+            let flow;
+
+            let Scripts = [];
+            let Servers = [];
+
+            //console.clear();
+
+            let data = document.querySelectorAll(".class-checkbox-scripts > div > input")
+
+            for (var i of data) {
+                if (i.checked == true) {
+                    Scripts.push(i.name);
+                }
+            }
+
+
+            data = document.querySelectorAll(".class-checkbox-servers-item > input")
+
+            for (var i of data) {
+                if (i.checked == true) {
+                    Servers.push(i.name);
+                }
+            }
+
+            flow =
+            {
+                Scripts: Scripts,
+                Servers: Servers
+            };
+
+            let ajaxRequst = await fetch("/Processing/Flow",
+                {
+                    method: "POST",
+                    headers:
+                    {
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify(flow)
+                });
+
+            //Result
+            console.log(await ajaxRequst.ok);
+        }
+
+        document.querySelector("#Markers").addEventListener("change", (e) => ChangeServer(e.target.value));
+
+        document.querySelector("#Flow").addEventListener("click", () => Flow());
+
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model List<SQLMultiFlowWeb.Areas.Reprocessing.Models.NonFlowedScriptsVersions>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<main>
+    <div>
+        <a asp-route="main">Главная</a>
+    </div>
+    <div class="class-user-id">
+        <h3>Пользователь:@User.Identity.Name</h3>
+    </div>
+
+    <div class="class-page-header">
+        <h4>Скрипты которые не были пролиты</h4>
+    </div>
+    <form name="MainForm">
+        <div class="class=" class-container-checkbox">
+
+            @foreach (var i in Model)
+            {
+                <div class="class-checkbox-item">
+                    <input type="checkbox" value="@i.ID" /><label>@i.ScriptName @i.ScriptVersion @i.ServerName @i.ServerDB</label>
+                </div>
+            }
+        </div>
+        <input type="button" value="Долить" id="reprocessing"/>
+    </form>
+</main>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        async function Reprocessing(data) {
+
+            let IDs =
+            {
+                IDs: []
+            };
+
+            for (var i of data) {
+                if (i.checked == true) {
+                    IDs.IDs.push(parseInt(i.value));
+                }
+            }
+
+            console.log(JSON.stringify(IDs));
+
+            let request = await fetch("/Reprocessing/Reprocessing",
+                {
+                    method:"POST",
+                    headers:
+                    {
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify(IDs)
+                });
+
+            console.log(await request.json());
+        }
+
+        document.querySelector("#reprocessing")
+        .addEventListener("click", () =>
+        {
+            let notFlowed = document.querySelectorAll(".class-checkbox-item > input");
+
+            Reprocessing(notFlowed);
+        });
+    </script>
+}

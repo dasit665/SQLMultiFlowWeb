@@ -3,6 +3,22 @@
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
-<h3>@User.Identity.Name</h3>
-<h3>@Path</h3>
+<main>
+    <div class="class-user-name">
+        <h3>Пользователь:@User.Identity.Name <a asp-route="logout">Выйти</a></h3>
+    </div>
+    <div class="class-container-refs">
+        <div class="class-ref">
+            <a asp-route="processing">Разливка</a>
+        </div>
+        <div class="class-ref">
+            <a asp-route="reprocessing">Доливка</a>
+        </div>
+        <div class="class-ref">
+            <a asp-route="reports">Отчеты</a>
+        </div>
+        <div class="class-ref">
+            <a asp-route="scripts">Скрипты</a>
+        </div>
+    </div>
+</main>

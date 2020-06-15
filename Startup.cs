@@ -66,8 +66,7 @@ namespace SQLMultiFlowWeb
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(name: "default", pattern: "{area=Main}/{controller=Home}/{action=Index}/{id?}");
-
+                endpoints.MapControllerRoute(name: "default", pattern: "{area=Main}/{controller=Home}/{action=Index}/{ID?}");
             });
 
             app.UseEndpoints(routes =>
@@ -75,6 +74,12 @@ namespace SQLMultiFlowWeb
                 routes.MapControllerRoute(name: "addLogin", pattern: "Accounts/AddLogin/Create");
                 routes.MapControllerRoute(name: "login", pattern: "Accounts/Access/Login");
                 routes.MapControllerRoute(name: "main", pattern: "Main/Home/Index");
+
+                routes.MapControllerRoute(name: "processing", pattern: "/Processing/Home/Index");
+                routes.MapControllerRoute(name: "reprocessing", pattern: "/Reprocessing/Home/Index");
+                routes.MapControllerRoute(name: "reports", pattern: "/Reports/Home/Index");
+                routes.MapControllerRoute(name: "scripts", pattern: "/Scripts/Home/Index");
+                routes.MapControllerRoute(name: "logout", pattern: "/Logout");
             });
         }
     }

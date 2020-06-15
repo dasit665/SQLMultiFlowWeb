@@ -57,6 +57,8 @@ namespace SQLMultiFlowWeb
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.DateOfTry).HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.ScriptVersionId).HasColumnName("ScriptVersionID");
 
                 entity.Property(e => e.ServerDbid).HasColumnName("ServerDBID");
@@ -64,12 +66,14 @@ namespace SQLMultiFlowWeb
                 entity.HasOne(d => d.ScriptVersion)
                     .WithMany(p => p.TbFlowed)
                     .HasForeignKey(d => d.ScriptVersionId)
-                    .HasConstraintName("FK_ScriptVersionID_Flowed__TO__ScriptVersion_ID");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ScriptVersionID_Flowed__TO__ScriptsVersion_ID");
 
                 entity.HasOne(d => d.ServerDb)
                     .WithMany(p => p.TbFlowed)
                     .HasForeignKey(d => d.ServerDbid)
-                    .HasConstraintName("FK_ServerDBID_Flowed__TO__Relations_ID");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServerDBID_Flowed__TO__ServerList_ID");
             });
 
             modelBuilder.Entity<TbInfo>(entity =>
