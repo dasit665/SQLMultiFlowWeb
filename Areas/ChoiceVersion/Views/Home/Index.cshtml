@@ -1,0 +1,172 @@
+﻿@model SQLMultiFlowWeb.Areas.ChoiceVersion.Models.ConsolidatedModel
+@{
+    ViewData["Title"] = "Версия скрипта";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+
+    List<SelectListItem> listItemsMarkers = new List<SelectListItem>();
+
+    foreach (var i in Model.Markers)
+    {
+        listItemsMarkers.Add(new SelectListItem(i.Marker, i.Marker));
+    }
+
+    listItemsMarkers.Add(new SelectListItem("Все", "All", true));
+}
+
+<main>
+    <div>
+        <a asp-route="main">Главная</a>
+    </div>
+    <div class="class-user-id">
+        <h3>Пользователь:@User.Identity.Name</h3>
+    </div>
+
+    <div class="class-page-header">
+        <h4>Заливка выбранных версий скриптов</h4>
+    </div>
+
+    <form name="MainForm">
+        <div class="class-checkbox-scripts">
+            @foreach (var i in Model.Scripts)
+            {
+                <div class="class-checkbox-scripts-versions">
+                    <input type="checkbox" checked="checked" id="@i.ScriptName"><label>@i.ScriptName</label>
+                    <select id="@i.ScriptName">
+                        @foreach (var j in i.Versions)
+                        {
+                            <option value="@j" id="@i.ScriptID">@j</option>
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+        <div class="class-markers-list">
+            <select id="Markers" asp-items="listItemsMarkers"></select>
+        </div>
+        <div class="classs-checkbox-servers">
+            @foreach (var i in Model.Servers)
+            {
+                <div class="classs-checkbox-server-item">
+                    <input type="checkbox" checked="checked" id="@i.ID" /><label>@i.ServerName @i.DB</label>
+                </div>
+            }
+        </div>
+        <input type="button" value="Разлить" id="Flow" />
+    </form>
+
+</main>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        let scripts = document.querySelectorAll(".class-checkbox-scripts-versions > input[type=checkbox]");
+
+        for (var i of scripts) {
+
+            i.addEventListener("change", (e) => {
+
+                if (e.target.checked == true) {
+                    document.querySelector(`.class-checkbox-scripts-versions > select[id="${e.target.id}"]`)
+                        .removeAttribute("disabled");
+                }
+                else {
+                    document.querySelector(`.class-checkbox-scripts-versions > select[id="${e.target.id}"]`)
+                        .setAttribute("disabled", "disabled");
+                }
+            });
+        }
+
+        async function ServersChange(Marker) {
+
+            let servers = document.querySelector(".classs-checkbox-servers");
+
+            servers.innerHTML = "";
+
+
+            data =
+            {
+                "Marker": Marker
+            };
+
+            let request = await fetch("/ChoiceVersion/ServersByMarkers",
+                {
+                    method: "POST",
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+
+            let fragment = document.createDocumentFragment();
+
+            for (var i of await request.json()) {
+
+                let div = document.createElement("div");
+                div.setAttribute("class", "classs-checkbox-server-item");
+
+                let input = document.createElement("input");
+                input.setAttribute("type", "checkbox");
+                input.setAttribute("checked", "checked");
+                input.setAttribute("id", i.ID);
+
+
+                let label = document.createElement('label');
+                label.textContent = `${i.ServerDomainName} ${i.DataBaseName}`;
+
+
+                div.appendChild(input);
+                div.appendChild(label);
+
+                fragment.appendChild(div);
+            }
+
+            servers.appendChild(fragment);
+
+        }
+
+
+        document.querySelector(`.class-markers-list > select[id="Markers"]`)
+            .addEventListener("change", (e) => ServersChange(e.target.value));
+
+        async function Flow(e) {
+
+            let data =
+            {
+                Scripts: [],
+                Servers: []
+            };
+
+            let scripts = document.querySelectorAll(`.class-checkbox-scripts-versions > input[type="checkbox"]`);
+
+            for (var i of scripts) {
+                if (i.checked == true) {
+
+                    let script = {};
+
+                    script.ScriptName = i.id;
+                    script.Version = document.querySelector(`.class-checkbox-scripts-versions > select[id="${i.id}"]`).value;
+
+                    data.Scripts.push(script);
+                }
+            }
+
+            let servers = document.querySelectorAll(`.classs-checkbox-server-item > input[type="checkbox"]`);
+
+            for (var i of servers) {
+                if (i.checked) {
+                    data.Servers.push(i.id);
+                }
+            }
+
+            console.log(data);
+        }
+
+        document.querySelector(`input#Flow`)
+            .addEventListener("click", (e) => Flow(e));
+
+
+    </script>
+}

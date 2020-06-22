@@ -1,0 +1,18 @@
+﻿@model Dictionary<string, string>
+@{
+    ViewData["Title"] = "Очистка отчетов";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<main>
+    <a asp-route="reports">к отчетам</a>
+    <h3>Пользователь:@User.Identity.Name</h3>
+    <h3>Очистка отчетев</h3>
+    <form method="post" asp-action="Clear">
+        @foreach (var i in Model)
+        {
+            <input type="checkbox" name="@i.Key" value="@i.Value" /><label>@i.Key</label><br />
+        }
+        <input type="submit" value="Ok" />
+    </form>
+</main>

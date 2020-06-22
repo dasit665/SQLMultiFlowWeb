@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using SQLMultiFlowWeb.Areas.Reprocessing.Models;
 
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+
 namespace SQLMultiFlowWeb.Areas.Reprocessing.Controllers
 {
     [Area("Reprocessing")]
     [Route("Reprocessing/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReprocessingController : ControllerBase
     {
         [HttpPost]

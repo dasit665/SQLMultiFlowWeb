@@ -7,6 +7,7 @@ namespace SQLMultiFlowWeb
     {
         public TbScriptVersion()
         {
+            TbErrors = new HashSet<TbErrors>();
             TbFlowed = new HashSet<TbFlowed>();
         }
 
@@ -17,6 +18,7 @@ namespace SQLMultiFlowWeb
         public string ScriptContent { get; set; }
 
         public virtual TbScriptsNames Script { get; set; }
+        public virtual ICollection<TbErrors> TbErrors { get; set; }
         public virtual ICollection<TbFlowed> TbFlowed { get; set; }
     }
 }

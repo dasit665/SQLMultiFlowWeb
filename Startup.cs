@@ -79,6 +79,7 @@ namespace SQLMultiFlowWeb
                 routes.MapControllerRoute(name: "reprocessing", pattern: "/Reprocessing/Home/Index");
                 routes.MapControllerRoute(name: "reports", pattern: "/Reports/Home/Index");
                 routes.MapControllerRoute(name: "scripts", pattern: "/Scripts/Home/Index");
+                routes.MapControllerRoute(name: "choiceversion", pattern: "/ChoiceVersion/Home/Index");
                 routes.MapControllerRoute(name: "logout", pattern: "/Logout");
             });
         }

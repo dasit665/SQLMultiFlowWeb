@@ -44,11 +44,19 @@ namespace SQLMultiFlowWeb
 
                 entity.Property(e => e.ErrorMessage).HasMaxLength(512);
 
-                entity.Property(e => e.ServerDb)
-                    .IsRequired()
-                    .HasColumnName("ServerDB")
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.ScriptVersionId).HasColumnName("ScriptVersionID");
+
+                entity.Property(e => e.ServerDbid).HasColumnName("ServerDBID");
+
+                entity.HasOne(d => d.ScriptVersion)
+                    .WithMany(p => p.TbErrors)
+                    .HasForeignKey(d => d.ScriptVersionId)
+                    .HasConstraintName("FK_ScriptVersionID_Errors__TO__ScriptVersion_ID");
+
+                entity.HasOne(d => d.ServerDb)
+                    .WithMany(p => p.TbErrors)
+                    .HasForeignKey(d => d.ServerDbid)
+                    .HasConstraintName("FK_ServerDB_Errors__TO__ServerLIst_ID");
             });
 
             modelBuilder.Entity<TbFlowed>(entity =>

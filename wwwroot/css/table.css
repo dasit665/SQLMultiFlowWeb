@@ -1,0 +1,28 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+main
+{
+    margin-left:1rem;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, tr, td {
+    border: solid 1px black;
+
+    padding-top:0.125rem;
+    padding-right:0.5rem;
+    padding-bottom:0.125rem;
+    padding-left:0.5rem;
+}
+
+th
+{
+    font-size:17px;
+}

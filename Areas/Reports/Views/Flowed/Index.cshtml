@@ -1,0 +1,39 @@
+﻿@model List<SQLMultiFlowWeb.Areas.Reports.Models.FlowedModel>
+@{
+    ViewData["Title"] = "Flowed table";
+    Layout = "~/Areas/Reports/Views/Shared/_TableLayout.cshtml";
+}
+
+<main>
+    <a asp-route="reports">к отчетам</a>
+    <h3>Пользователь:@User.Identity.Name</h3>
+    <h3>Пролитые скрипты</h3>
+    <table>
+        <tr>
+            <th>ID:</th>
+            <th>Имя скрипта:</th>
+            <th>Версия скрипта:</th>
+            <th>Имя сервера и БД:</th>
+            <th>Время попытки:</th>
+            <th>Пролито:</th>
+        </tr>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Id</td>
+                <td>@i.ScriptName</td>
+                <td>@i.ScriptVersion</td>
+                <td>@i.ServerNameDB</td>
+                <td>@i.DateOfTry</td>
+                @if (i.VersionFlowed == true)
+                {
+                    <td>Да</td>
+                }
+                else
+                {
+                    <td>Нет</td>
+                }
+            </tr>
+        }
+    </table>
+</main>

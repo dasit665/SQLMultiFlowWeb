@@ -16,7 +16,7 @@ main {
 .class-container-refs {
     margin-top:0.25rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
     .class-container-refs > .class-ref {

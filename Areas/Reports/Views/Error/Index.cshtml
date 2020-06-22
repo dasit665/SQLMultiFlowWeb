@@ -1,0 +1,33 @@
+﻿@model List<Areas.Reports.Models.ErrorModel>
+@{
+    ViewData["Title"] = "Таблица ошибок";
+    Layout = "~/Areas/Reports/Views/Shared/_TableLayout.cshtml";
+}
+    <main>
+        <a asp-route="reports">к отчетам</a>
+        <h3>Пользователь:@User.Identity.Name</h3>
+        <h3>Пролитые скрипты</h3>
+        <table>
+            <tr>
+                <th>ID:</th>
+                <th>Дата и время:</th>
+                <th>Имя скрипта:</th>
+                <th>Версия скрипта:</th>
+                <th>Сервер и БД:</th>
+                <th>Код ошибки:</th>
+                <th>Сообщение:</th>
+            </tr>
+            @foreach (var i in Model)
+            {
+                <tr>
+                    <td>@i.Id</td>
+                    <td>@i.DateAndTime</td>
+                    <td>@i.ScriptName</td>
+                    <td>@i.ScriptVersion</td>
+                    <td>@i.ServerDb</td>
+                    <td>@i.ErrorCode</td>
+                    <td>@i.ErrorMessage</td>
+                </tr>
+            }
+        </table>
+    </main>

@@ -1,8 +1,135 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+﻿@{
+    ViewData["Title"] = "Скрипты";
+    Layout = "~/Areas/Scripts/Views/Shared/_ScriptsLayout.cshtml";
 }
 
-<h3>@User.Identity.Name</h3>
-<h3>@Path</h3>
+<main>
+    <div>
+        <a asp-route="main">Главная</a>
+    </div>
+    <div class="class-user-id">
+        <h3>Пользователь:@User.Identity.Name</h3>
+    </div>
+
+    <div>
+        <h4>Скрипты и версии</h4>
+    </div>
+
+    <div class="class-scripts-name">
+    </div>
+
+    <div class="class-scripts-version">
+    </div>
+
+    <div class="class-script-content">
+    </div>
+
+</main>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        let scriptChoice = document.querySelector(".class-scripts-name");
+
+        let scriptVersion = document.querySelector(".class-scripts-version");
+
+        let scriptContent = document.querySelector(".class-script-content");
+
+        async function ShowScript() {
+
+            let script = scriptChoice.querySelector('select').value;
+            let version = scriptVersion.querySelector('select').value;
+
+            let fd = new FormData();
+            fd.append("ScriptName", script);
+            fd.append("ScriptVersion", version);
+
+            let bodyContent =
+            {
+                ScriptName: script,
+                ScriptVersion: parseFloat(version)
+            }
+
+            let query = await fetch("GetScriptsContent",
+                {
+                    method: "POST",
+                    body: fd
+                });
+
+            let data = await query.text();
+
+            let p = document.createElement("p");
+            p.textContent = data;
+
+            scriptContent.firstChild.remove();
+            scriptContent.appendChild(p);
+
+
+        }
+
+        async function SetScriptVersion(ScriptName) {
+
+            let fd = new FormData();
+            fd.append("ScriptName", ScriptName);
+
+            let query = await fetch("GetScriptsVersions",
+                {
+                    method: "POST",
+                    body: fd
+                });
+
+            let data = await query.json();
+
+            if (data !== null) {
+
+                let select = document.createElement("select");
+                select.setAttribute("name", "version");
+
+                for (var i of data) {
+
+                    let option = document.createElement("option");
+                    option.setAttribute("value", i);
+                    option.textContent = i;
+
+                    select.appendChild(option);
+                }
+
+                scriptVersion.childNodes.forEach(e => e.remove());
+                scriptVersion.appendChild(select);
+
+                select.addEventListener("change", ShowScript);
+            }
+
+        }
+
+        async function SetScriptName() {
+            let query = await fetch("GetScriptsNames",
+                {
+                    method: "POST"
+                });
+
+            let select = document.createElement('select');
+            select.setAttribute("name", "scriptName");
+
+            let data = await query.json();
+
+            for (var i of data) {
+
+                let option = document.createElement(`option`);
+                option.setAttribute("value", i.ScriptName);
+                option.textContent = i.ScriptName;
+
+                select.appendChild(option);
+            }
+
+            scriptChoice.appendChild(select);
+
+            select.addEventListener("change", (e) => SetScriptVersion(e.target.value));
+        }
+
+        window.addEventListener("load", SetScriptName);
+
+
+    </script>
+}

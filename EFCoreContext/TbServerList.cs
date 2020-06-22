@@ -7,6 +7,7 @@ namespace SQLMultiFlowWeb
     {
         public TbServerList()
         {
+            TbErrors = new HashSet<TbErrors>();
             TbFlowed = new HashSet<TbFlowed>();
             TbRelations = new HashSet<TbRelations>();
         }
@@ -17,6 +18,7 @@ namespace SQLMultiFlowWeb
         public string ServerLogin { get; set; }
         public string ServerPassword { get; set; }
 
+        public virtual ICollection<TbErrors> TbErrors { get; set; }
         public virtual ICollection<TbFlowed> TbFlowed { get; set; }
         public virtual ICollection<TbRelations> TbRelations { get; set; }
     }

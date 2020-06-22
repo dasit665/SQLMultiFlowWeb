@@ -1,9 +1,28 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Выбор отчета";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h3>@User.Identity.Name</h3>
-<h3>@Path</h3>
-
+<main>
+    <div class="class-user-name">
+        <h3>Пользователь:@User.Identity.Name <a asp-route="logout">Выйти</a></h3>
+    </div>
+    <div class="class-container-refs">
+        <div class="class-ref">
+            <a asp-route="main">На главную</a>
+        </div>
+        <div class="class-ref">
+            <a asp-controller="info">Информационный отчет</a>
+        </div>
+        <div class="class-ref">
+            <a asp-controller="Error">Отчет о ошибках</a>
+        </div>
+        <div class="class-ref">
+            <a asp-controller="Flowed">Пролитые скрипты</a>
+        </div>
+        <div class="class-ref">
+            <a asp-controller="Clear">Очистить отчеты</a>
+        </div>
+    </div>
+</main>
